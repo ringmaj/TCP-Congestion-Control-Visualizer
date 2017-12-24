@@ -10,9 +10,117 @@
     <title>TCP Congestion Control</title>
 
   <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300italic' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/shift.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
+    <link rel="stylesheet" href="main.css">
+ 
 </head>
 
 <body>
+	 <nav class="navbar navbar-default navbar-fixed-top" id="navB">
+        <div class="container" id="navc">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand" href="#"></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li class="active"><a href="#top">Home</a></li>
+                    <li id="aboutButton"><a href="#aboutMe">Additive Increase </a></li>
+                    <li><a href="#experience-container">Multiplicative Decrease</a></li>
+
+                            <li><a href="#pdf-container">Slow Start</a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="timeline-tab"><a href="#timeline-container">LinkedIn</a></li>
+                    <li><a href="#empty">GitHub <span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    
+    
+            <!-- Packet List-->
+    <div id="packetSelector">
+        
+            <!-- Select how many packets are being sent-->
+        <div class="conatainer numPacketsSelector">
+            <div id="numPacketsField">Number of packets sent
+            </div>
+            
+            <form id="numPacketSentForm" onsubmit="initPackets(); return false">
+  <input id="numberField" type="number" name="numberOfPacketsSent" placeholder="?">
+</form>
+            
+        </div>
+        
+         <ul id="packetList">
+            <li id="packetsSent">Packets sent</li>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+        
+                 <script>
+                
+                
+                
+function initPackets() {
+    var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
+    var size = document.getElementById("packetList").getElementsByTagName("li").length;
+//    alert("The form was submitted: " + numPackets + "  SIZE: "+ size);
+//    
+    
+    // Clear our packetlist by removing all child nodes
+    var myNode = document.getElementById("packetList");
+    while (document.getElementById("packetList").getElementsByTagName("li").length > 1) {
+    myNode.removeChild(myNode.lastChild);
+    }
+    
+    // Add the number of packets selected
+    for(var i = 0; i < numPackets; i++){
+        var node = document.createElement("li"); 
+        var textnode = document.createTextNode(i+1);
+        node.appendChild(textnode);
+        document.getElementById("packetList").appendChild(node);
+    }
+    
+    
+
+        
+}
+                
+                
+</script>
+
+        
+       
+        
+        
+        
+        <script>
+        
+            function updateData(){
+           
+                alert("ENTERED: "+x);
+                
+            }
+        
+        </script>
+    
+    </div>
+    
   <h3> TCP CONGESTION CONTROL</h3>
 </body>
 </html>
