@@ -55,12 +55,16 @@ padding: 10px;
     cursor: pointer;
 }
 
+
+
 #packetsSent, #packetsDropped {
         background-color: #ff8d8d !important;
         color: white;
         padding: 10px;    
     margin-right: 7px;
 }
+
+
 
 #packetsSent:hover {
     cursor: default !important;
@@ -106,6 +110,8 @@ padding: 10px;
         
 
 }
+
+
 
 html {
     padding-top: 60px;
