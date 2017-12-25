@@ -60,8 +60,7 @@
             
             <form id="numPacketSentForm" onsubmit="initPackets(); return false">
   <input id="numberField" type="number" name="numberOfPacketsSent" placeholder="?">
-</form>
-            
+</form>  
         </div>
         
          <ul id="packetList">
@@ -72,15 +71,23 @@
             <li>4</li>
         </ul>
         
-                 <script>
-                
-                
-                
+        <ul id="packetDroppedList">
+            <li id="packetsDropped">Packets dropped</li>
+        </ul>
+        
+<script>
+              
+// Global variables 
+var droppedSize = document.getElementById("packetDroppedList").getElementsByTagName("li").length - 1;
+//alert("DROPPED SIZE: "+ droppedSize);
+
+var packetsDroppedArray = new Array(droppedSize);
+    
+// Function to initialize a number of packets sent
 function initPackets() {
     var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
     var size = document.getElementById("packetList").getElementsByTagName("li").length;
-//    alert("The form was submitted: " + numPackets + "  SIZE: "+ size);
-//    
+//    alert("The form was submitted: " + numPackets + "  SIZE: "+ size); 
     
     // Clear our packetlist by removing all child nodes
     var myNode = document.getElementById("packetList");
@@ -94,12 +101,58 @@ function initPackets() {
         var textnode = document.createTextNode(i+1);
         node.appendChild(textnode);
         document.getElementById("packetList").appendChild(node);
-    }
-    
-    
-
-        
+    } 
 }
+                     
+
+// Click function for packet drops 
+document.getElementById("packetList").addEventListener("click",function(e) {
+        var size = document.getElementById("packetDroppedList").getElementsByTagName("li").length;
+    
+    // e.target is our targetted element.
+    if(e.target && e.target.nodeName == "LI") {
+        e.target.style.backgroundColor = "#ff1b1b";
+        e.target.style.color = "white";
+        
+        // Sorting elements in increasing order
+//        var numList = new Array(size);
+//        var myNode = document.getElementById("packetList").children;
+        
+        
+        // push to our array of dropped packets
+       packetsDroppedArray.push(Number(e.target.innerHTML));
+        //alert("DROPPED: LENGTH "+ packetsDroppedArray.length);
+        
+        // sort our dropped packets
+        packetsDroppedArray.sort(function(a, b){return a - b});
+        
+        var output = "";
+        
+        for(var i = 0; i < packetsDroppedArray.length; i++){
+            output +=  packetsDroppedArray[i] +", ";
+        }
+        
+     //   alert("DROPPED: "+ output);
+   
+        
+    
+        
+//        // Clear our packetlist by removing all child nodes
+        var myNode = document.getElementById("packetDroppedList");
+        while (document.getElementById("packetDroppedList").getElementsByTagName("li").length > 1) {
+        myNode.removeChild(myNode.lastChild);
+        }
+        
+//        // Add to packets dropped list 
+        for(var i = 0; i < packetsDroppedArray.length; i++){
+        var node = document.createElement("li"); 
+        var textnode = document.createTextNode(packetsDroppedArray[i]);
+        node.appendChild(textnode);
+        document.getElementById("packetDroppedList").appendChild(node);
+        }
+       
+    }
+});
                 
                 
 </script>
