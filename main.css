@@ -1,8 +1,6 @@
-
-
 #navB {
-background-color: white !important;
-    
+    background-color: white !important;
+
 }
 
 #navc {
@@ -14,21 +12,22 @@ background-color: white !important;
 }
 
 .nav {
-    background-color:white;
+    background-color: white;
 }
 
 
 #packetSelector {
-    
+
     width: 90%;
     background-color: #ffffff;
     margin: auto;
     margin-top: 50px;
-    height: 500px;
-    padding: 0px;
+/*    height: 800px;*/
+        display: block;
+    padding: 20px;
     border: 2px solid #cccccc;
-    border-radius: 20px;
-    
+    /*    border-radius: 20px;*/
+    border-radius: 5px
 }
 
 #packetList {
@@ -36,18 +35,25 @@ background-color: white !important;
     margin-top: -5px;
     background-color: white;
     width: 100%;
-    display:block;
+    display: block;
     padding-bottom: 15px;
     border-bottom: 1.5px solid #dedede;
 }
 
-#packetList li, #packetDroppedList li {
-display: inline-block;
-padding: 10px;
+#packetDroppedList {
+    padding-top: 4px;
+    padding-bottom: 15px;
+    border-bottom: 1.5px solid #dedede;
+}
+
+#packetList li,
+#packetDroppedList li {
+    display: inline-block;
+    padding: 10px;
     background-color: #e2e2e2;
     margin-right: 5px;
     margin-top: 10px;
-    
+
 }
 
 #packetList li:hover {
@@ -57,14 +63,20 @@ padding: 10px;
 
 
 
-#packetsSent, #packetsDropped {
-        background-color: #ff8d8d !important;
-        color: white;
-        padding: 10px;    
+#packetsSent,
+#packetsDropped {
+    background-color: #ff8d8d !important;
+    color: white;
+    padding: 10px;
     margin-right: 7px;
+    margin-left: -40px;
+
 }
 
+#packetsDroppedList {
+    border-bottom: 1.5px solid #dedede;
 
+}
 
 #packetsSent:hover {
     cursor: default !important;
@@ -72,54 +84,62 @@ padding: 10px;
 
 
 .numPacketsSelector {
-   height: 60px;
+    height: 60px;
     margin: auto;
     margin-top: 20px;
     background-color: white;
     width: 100%;
-    
+
     display: inline-flex;
     margin-bottom: 10px;
     border-bottom: 1.5px solid #dedede;
 }
 
 #numPacketsField {
-   display: inline-block;
-padding: 10px;
+    display: inline-block;
+    padding: 10px;
     background-color: #ff8d8d;
     color: white;
     margin-left: 40px;
     margin-right: 10px;
     height: 40px;
-        text-align:center;
-         
+    text-align: center;
+    margin-left: 0px;
 
-    
+
 }
 
 #numPacketSentForm {
     display: inline-block;
-    text-align:center
+    text-align: center
 }
 
 #numberField {
-        width: 75px;
-        margin: auto;
+    width: 75px;
+    margin: auto;
     height: 40px;
-    text-align:center
-        
+    text-align: center
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+
+    opacity: 1;
+
 
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button {  
 
-   opacity: 1;
-
+#myChart {
+    background-color: #f0f0f0;
+    margin-top: 30px;
+     border: 2px solid #dedede;
 }
 
 html {
     padding-top: 60px;
 }
 
-
+body {
+    background-color: #967070 !important;
+}
