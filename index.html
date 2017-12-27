@@ -2,7 +2,7 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-        <link href="simple-sidebar.css" rel="stylesheet">
+    <link href="simple-sidebar.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.typeit/4.4.0/typeit.min.js"></script>
     <!-- Latest compiled and minified CSS -->
@@ -38,11 +38,13 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
- 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
 </head>
 
 <body>
-	 <nav class="navbar navbar-default navbar-fixed-top" id="navB">
+    <nav class="navbar navbar-default navbar-fixed-top" id="navB">
         <div class="container" id="navc">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
@@ -52,10 +54,10 @@
                 <ul class="nav navbar-nav">
 
                     <li class="active"><a href="#top">Home</a></li>
-                    <li id="aboutButton"><a href="#aboutMe">Additive Increase </a></li>
-                    <li><a href="#experience-container">Multiplicative Decrease</a></li>
+                    <li id="aboutButton"><a href="#aboutMe">AIMD</a></li>
+                    <li><a href="#experience-container">Slow Start</a></li>
 
-                            <li><a href="#pdf-container">Slow Start</a></li>
+                    <li><a href="#pdf-container">Tutorial</a></li>
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -66,132 +68,172 @@
             <!--/.nav-collapse -->
         </div>
     </nav>
-    
-    
-            <!-- Packet List-->
+
+
+    <!-- Packet List-->
     <div id="packetSelector">
-        
-            <!-- Select how many packets are being sent-->
+
+        <!-- Select how many packets are being sent-->
         <div class="conatainer numPacketsSelector">
-            <div id="numPacketsField">Number of packets sent  <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+            <div id="numPacketsField">Number of packets sent <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
             </div>
-            
+
             <form id="numPacketSentForm" onsubmit="initPackets(); return false">
-  <input id="numberField" type="number" name="numberOfPacketsSent" placeholder="?">
-</form>  
+                <input id="numberField" type="number" name="numberOfPacketsSent" placeholder="?">
+            </form>
         </div>
-        
-         <ul id="packetList">
-            <li id="packetsSent">Packets sent  <span class="	glyphicon glyphicon-send	Try it
+
+        <ul id="packetList">
+            <li id="packetsSent">Packets sent <span class="	glyphicon glyphicon-send	Try it
 " aria-hidden="true"></span></li>
             <li>1</li>
             <li>2</li>
             <li>3</li>
             <li>4</li>
         </ul>
-        
+
         <ul id="packetDroppedList">
             <li id="packetsDropped">Packets dropped <span class="glyphicon">&#xe014;</span></li>
         </ul>
-        
-<script>
-              
-// Global variables 
-var droppedSize = document.getElementById("packetDroppedList").getElementsByTagName("li").length - 1;
-//alert("DROPPED SIZE: "+ droppedSize);
 
-var packetsDroppedArray = new Array(droppedSize);
-    
-// Function to initialize a number of packets sent
-function initPackets() {
-    var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
-    var size = document.getElementById("packetList").getElementsByTagName("li").length;
-//    alert("The form was submitted: " + numPackets + "  SIZE: "+ size); 
-    
-    // Clear our packetlist by removing all child nodes
-    var myNode = document.getElementById("packetList");
-    while (document.getElementById("packetList").getElementsByTagName("li").length > 1) {
-    myNode.removeChild(myNode.lastChild);
-    }
-    
-    // Add the number of packets selected
-    for(var i = 0; i < numPackets; i++){
-        var node = document.createElement("li"); 
-        var textnode = document.createTextNode(i+1);
-        node.appendChild(textnode);
-        document.getElementById("packetList").appendChild(node);
-    } 
-}
-                     
+        <canvas id="myChart" width="1500" height="450"></canvas>
 
-// Click function for packet drops 
-document.getElementById("packetList").addEventListener("click",function(e) {
-        var size = document.getElementById("packetDroppedList").getElementsByTagName("li").length;
-    
-    // e.target is our targetted element.
-    if(e.target && e.target.nodeName == "LI") {
-        e.target.style.backgroundColor = "#ff1b1b";
-        e.target.style.color = "white";
-        
-        // Sorting elements in increasing order
-//        var numList = new Array(size);
-//        var myNode = document.getElementById("packetList").children;
-        
-        
-        // push to our array of dropped packets
-       packetsDroppedArray.push(Number(e.target.innerHTML));
-        //alert("DROPPED: LENGTH "+ packetsDroppedArray.length);
-        
-        // sort our dropped packets
-        packetsDroppedArray.sort(function(a, b){return a - b});
-        
-        var output = "";
-        
-        for(var i = 0; i < packetsDroppedArray.length; i++){
-            output +=  packetsDroppedArray[i] +", ";
-        }
-        
-     //   alert("DROPPED: "+ output);
-   
-        
-    
-        
-//        // Clear our packetlist by removing all child nodes
-        var myNode = document.getElementById("packetDroppedList");
-        while (document.getElementById("packetDroppedList").getElementsByTagName("li").length > 1) {
-        myNode.removeChild(myNode.lastChild);
-        }
-        
-//        // Add to packets dropped list 
-        for(var i = 0; i < packetsDroppedArray.length; i++){
-        var node = document.createElement("li"); 
-        var textnode = document.createTextNode(packetsDroppedArray[i]);
-        node.appendChild(textnode);
-        document.getElementById("packetDroppedList").appendChild(node);
-        }
-       
-    }
-});
-                
-                
-</script>
-
-        
-       
-        
-        
-        
         <script>
-        
-            function updateData(){
-           
-                alert("ENTERED: "+x);
-                
+            // Global variables 
+            var droppedSize = document.getElementById("packetDroppedList").getElementsByTagName("li").length - 1;
+            //alert("DROPPED SIZE: "+ droppedSize);
+
+            var packetsDroppedArray = new Array(droppedSize);
+
+            // Function to initialize a number of packets sent
+            function initPackets() {
+                var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
+                var size = document.getElementById("packetList").getElementsByTagName("li").length;
+                //    alert("The form was submitted: " + numPackets + "  SIZE: "+ size); 
+
+                // Clear our packetlist by removing all child nodes
+                var myNode = document.getElementById("packetList");
+                while (document.getElementById("packetList").getElementsByTagName("li").length > 1) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+
+                // Add the number of packets selected
+                for (var i = 0; i < numPackets; i++) {
+                    var node = document.createElement("li");
+                    var textnode = document.createTextNode(i + 1);
+                    node.appendChild(textnode);
+                    document.getElementById("packetList").appendChild(node);
+                }
             }
-        
+
+
+            // Click function for packet drops 
+            document.getElementById("packetList").addEventListener("click", function(e) {
+                var size = document.getElementById("packetDroppedList").getElementsByTagName("li").length;
+
+                // e.target is our targetted element.
+                if (e.target && e.target.nodeName == "LI") {
+                    e.target.style.backgroundColor = "#ff1b1b";
+                    e.target.style.color = "white";
+
+                    // Sorting elements in increasing order
+                    //        var numList = new Array(size);
+                    //        var myNode = document.getElementById("packetList").children;
+
+
+                    // push to our array of dropped packets
+                    packetsDroppedArray.push(Number(e.target.innerHTML));
+                    //alert("DROPPED: LENGTH "+ packetsDroppedArray.length);
+
+                    // sort our dropped packets
+                    packetsDroppedArray.sort(function(a, b) {
+                        return a - b
+                    });
+
+                    var output = "";
+
+                    for (var i = 0; i < packetsDroppedArray.length; i++) {
+                        output += packetsDroppedArray[i] + ", ";
+                    }
+
+                    //   alert("DROPPED: "+ output);
+
+
+
+
+                    //        // Clear our packetlist by removing all child nodes
+                    var myNode = document.getElementById("packetDroppedList");
+                    while (document.getElementById("packetDroppedList").getElementsByTagName("li").length > 1) {
+                        myNode.removeChild(myNode.lastChild);
+                    }
+
+                    //        // Add to packets dropped list 
+                    for (var i = 0; i < packetsDroppedArray.length; i++) {
+                        var node = document.createElement("li");
+                        var textnode = document.createTextNode(packetsDroppedArray[i]);
+                        node.appendChild(textnode);
+                        document.getElementById("packetDroppedList").appendChild(node);
+                    }
+
+                }
+            });
         </script>
-    
+
+
+
+
+
+        <script>
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var rttNum = [1];
+            for (var i = 2; i < 10; i++) {
+                rttNum.push(i);
+            }
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: rttNum,
+                    datasets: [{
+                        data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
+                        label: "AIMD",
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }, {
+                        data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
+                        label: "Slow Start",
+                        borderColor: "#8e5ea2",
+                        fill: false
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'TCP Congestion Control Methods'
+                    },
+
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'RTT',
+                                fontColor: '#555555',
+                                fontStyle: "bold"
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Congestion Window',
+                                fontColor: '#555555',
+                                fontStyle: "bold"
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
     </div>
-    
+
 </body>
 </html>
