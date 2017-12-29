@@ -1,3 +1,17 @@
+:root {
+    --main-color: #ff8d8d;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
 #navB {
     background-color: white !important;
 
@@ -22,15 +36,14 @@
     background-color: #ffffff;
     margin: auto;
     margin-top: 50px;
-/*    height: 800px;*/
-        display: block;
+    display: block;
     padding: 20px;
     border: 2px solid #cccccc;
-    /*    border-radius: 20px;*/
-    border-radius: 5px
+    cursor: default;
+    border-radius: 5px;
 }
 
-#packetList {
+#packetList, #outputPacketList {
     margin: auto;
     margin-top: -5px;
     background-color: white;
@@ -38,16 +51,21 @@
     display: block;
     padding-bottom: 15px;
     border-bottom: 1.5px solid #dedede;
+    padding: 0px;
+    padding-bottom: 15px;
 }
 
 #packetDroppedList {
     padding-top: 4px;
     padding-bottom: 15px;
     border-bottom: 1.5px solid #dedede;
+    padding: 0px;
+    padding-bottom: 15px;
+
 }
 
 #packetList li,
-#packetDroppedList li {
+#packetDroppedList li, #outputPacketList li {
     display: inline-block;
     padding: 10px;
     background-color: #e2e2e2;
@@ -57,19 +75,18 @@
 }
 
 #packetList li:hover {
-    background-color: #ff8d8d;
+    background-color: var(--main-color);
     cursor: pointer;
 }
 
 
 
 #packetsSent,
-#packetsDropped {
-    background-color: #ff8d8d !important;
+#packetsDropped, #sendOutPutList #packetsSent {
+    background-color: var(--main-color) !important;
     color: white;
     padding: 10px;
     margin-right: 7px;
-    margin-left: -40px;
 
 }
 
@@ -98,7 +115,7 @@
 #numPacketsField {
     display: inline-block;
     padding: 10px;
-    background-color: #ff8d8d;
+    background-color: var(--main-color);
     color: white;
     margin-left: 40px;
     margin-right: 10px;
@@ -133,8 +150,133 @@ input[type=number]::-webkit-outer-spin-button {
 #myChart {
     background-color: #f0f0f0;
     margin-top: 30px;
-     border: 2px solid #dedede;
+    border: 2px solid #dedede;
 }
+
+#analysisSection {
+   width: 90%;
+    background-color: #ffffff;
+    margin: auto;
+    margin-top: 50px;
+    display: block;
+    padding: 20px;
+    border: 2px solid #cccccc;
+    cursor: default;
+    border-radius: 5px;
+    display: inline-block;
+    margin-left: auto;
+    margin-left: 5%;
+    margin-bottom: 40px;
+    
+}
+
+#aimdAnalysis,
+#slowStartAnalysis {
+ width: 49.6%;
+
+}
+
+.SentDroppedDiv{
+    display: inline-flex;
+    background-color: white !important;
+    color: #5a5a5a !important;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px !important;
+    width: 100%;
+        border-bottom: 1.5px solid #d8d8d8;
+}
+
+.SentDroppedDiv p {
+        display: inline-flex;
+    background-color: white !important;
+    color: #5a5a5a !important;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px !important;
+}
+
+
+#aimdPackSent {
+    margin-left: 5px;
+    border-right: 1.5px solid #d8d8d8;
+    font-weight: bold;
+    
+}
+
+
+.noBorder {
+    border-style: none !important;
+}
+
+.analysisTitle {}
+
+.analysisTitle p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    background-color: var(--main-color);
+    color: white;
+    padding: 10px;
+}
+
+.analysisPackInfo {
+    margin-left: -10px !important;
+}
+
+#aimdAnalysis {
+/*
+    border-right: 1.5px solid #dedede;
+    padding-right: 20px;
+*/
+    float: left;
+    border-right: 1.5px solid #d8d8d8;
+    padding-right: 13px;
+
+}
+
+#slowStartAnalysis {
+    float: right;
+}
+
+#outputList {
+    display: block;
+}
+#sendOutPutList {
+    width: 90%;
+    height: 250px;
+    background-color: #eaeaea;
+    margin: auto;
+/*    background-color: #f0f0f0;*/
+/*        background-color: #e8e8e8;*/
+/*        background-color: #ededed;*/
+background-color: white;
+    margin-top: 30px;
+    border: 2px solid #dedede;
+    display: block;
+    padding: 10px;
+}
+
+#sendOutPutList li {
+/*    background-color: #cbcbcb !important;*/
+/*    color: white;*/
+}
+
+#sendOutPutList #packetsSent {
+    padding-right: 10px;
+    border-right: 1.5px solid #888888;
+
+}
+
+.outPutListDiv {
+/*    background-color: #e6e6e6 !important;*/
+    border-bottom: 1.5px solid #c6c6c6 !important;
+
+}
+
+
+.droppedPacketRed {
+/*    background-color: #006bfd !important;*/
+}
+
 
 html {
     padding-top: 60px;
