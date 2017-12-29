@@ -1,6 +1,7 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +9,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Majok Francis Ring</title>
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300italic' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
@@ -23,7 +23,6 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="simple-sidebar.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.typeit/4.4.0/typeit.min.js"></script>
     <!-- Latest compiled and minified CSS -->
@@ -32,7 +31,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="footer-reveal.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
@@ -44,6 +42,9 @@
 </head>
 
 <body>
+
+
+    <!--------------------------- NAV BAR-------------------------------------------------------------->
     <nav class="navbar navbar-default navbar-fixed-top" id="navB">
         <div class="container" id="navc">
             <div class="navbar-header">
@@ -68,11 +69,14 @@
             <!--/.nav-collapse -->
         </div>
     </nav>
+    <!------------------------------------------------------------------------------------------------->
+
 
 
     <!-- Packet List-->
     <div id="packetSelector">
 
+        <!------------------------------------------------------------------------------------------------->
         <!-- Select how many packets are being sent-->
         <div class="conatainer numPacketsSelector">
             <div id="numPacketsField">Number of packets sent <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
@@ -82,7 +86,7 @@
                 <input id="numberField" type="number" name="numberOfPacketsSent" placeholder="?">
             </form>
         </div>
-
+        <!------------------------------------------------------------------------------------------------->
         <ul id="packetList">
             <li id="packetsSent">Packets sent <span class="	glyphicon glyphicon-send	Try it
 " aria-hidden="true"></span></li>
@@ -91,100 +95,24 @@
             <li>3</li>
             <li>4</li>
         </ul>
-
+        <!------------------------------------------------------------------------------------------------->
         <ul id="packetDroppedList">
             <li id="packetsDropped">Packets dropped <span class="glyphicon">&#xe014;</span></li>
         </ul>
-
+        <!------------------------------------------------------------------------------------------------->
         <canvas id="myChart" width="1500" height="450"></canvas>
-
-        <script>
-            // Global variables 
-            var droppedSize = document.getElementById("packetDroppedList").getElementsByTagName("li").length - 1;
-            //alert("DROPPED SIZE: "+ droppedSize);
-
-            var packetsDroppedArray = new Array(droppedSize);
-
-            // Function to initialize a number of packets sent
-            function initPackets() {
-                var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
-                var size = document.getElementById("packetList").getElementsByTagName("li").length;
-                //    alert("The form was submitted: " + numPackets + "  SIZE: "+ size); 
-
-                // Clear our packetlist by removing all child nodes
-                var myNode = document.getElementById("packetList");
-                while (document.getElementById("packetList").getElementsByTagName("li").length > 1) {
-                    myNode.removeChild(myNode.lastChild);
-                }
-
-                // Add the number of packets selected
-                for (var i = 0; i < numPackets; i++) {
-                    var node = document.createElement("li");
-                    var textnode = document.createTextNode(i + 1);
-                    node.appendChild(textnode);
-                    document.getElementById("packetList").appendChild(node);
-                }
-            }
+        <!------------------------------------------------------------------------------------------------->
 
 
-            // Click function for packet drops 
-            document.getElementById("packetList").addEventListener("click", function(e) {
-                var size = document.getElementById("packetDroppedList").getElementsByTagName("li").length;
-
-                // e.target is our targetted element.
-                if (e.target && e.target.nodeName == "LI") {
-                    e.target.style.backgroundColor = "#ff1b1b";
-                    e.target.style.color = "white";
-
-                    // Sorting elements in increasing order
-                    //        var numList = new Array(size);
-                    //        var myNode = document.getElementById("packetList").children;
-
-
-                    // push to our array of dropped packets
-                    packetsDroppedArray.push(Number(e.target.innerHTML));
-                    //alert("DROPPED: LENGTH "+ packetsDroppedArray.length);
-
-                    // sort our dropped packets
-                    packetsDroppedArray.sort(function(a, b) {
-                        return a - b
-                    });
-
-                    var output = "";
-
-                    for (var i = 0; i < packetsDroppedArray.length; i++) {
-                        output += packetsDroppedArray[i] + ", ";
-                    }
-
-                    //   alert("DROPPED: "+ output);
-
-
-
-
-                    //        // Clear our packetlist by removing all child nodes
-                    var myNode = document.getElementById("packetDroppedList");
-                    while (document.getElementById("packetDroppedList").getElementsByTagName("li").length > 1) {
-                        myNode.removeChild(myNode.lastChild);
-                    }
-
-                    //        // Add to packets dropped list 
-                    for (var i = 0; i < packetsDroppedArray.length; i++) {
-                        var node = document.createElement("li");
-                        var textnode = document.createTextNode(packetsDroppedArray[i]);
-                        node.appendChild(textnode);
-                        document.getElementById("packetDroppedList").appendChild(node);
-                    }
-
-                }
-            });
-        </script>
-
-
-
+        <!--
+        Script to control packet selection and dropped packets
+        <script src="JavaScript/PacketControl.js"></script>
+-->
 
 
         <script>
-            var ctx = document.getElementById("myChart").getContext('2d');
+            
+                        var ctx = document.getElementById("myChart").getContext('2d');
             var rttNum = [1];
             for (var i = 2; i < 10; i++) {
                 rttNum.push(i);
@@ -194,23 +122,23 @@
                 data: {
                     labels: rttNum,
                     datasets: [{
-                        data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
+                        data: [0,0,0,0,0,0,0,0,0,0],
                         label: "AIMD",
                         borderColor: "#3e95cd",
                         fill: false
                     }, {
-                        data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
+                        data: [0,0,0,0,0,0,0,0,0,0],
                         label: "Slow Start",
                         borderColor: "#8e5ea2",
                         fill: false
                     }]
                 },
                 options: {
+
                     title: {
                         display: true,
                         text: 'TCP Congestion Control Methods'
                     },
-
                     scales: {
                         xAxes: [{
                             scaleLabel: {
@@ -228,12 +156,338 @@
                                 fontStyle: "bold"
                             }
                         }]
+                    },
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
                     }
                 }
             });
+
+
+     
+
+            function addData(chart, label, data) {
+                chart.data.labels.push(label);
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data.push(data);
+                });
+                chart.update();
+            }
+
+            function removeData(chart) {
+                chart.data.labels = [];
+                chart.data.datasets[0] = [];
+                chart.data.datasets[1] = [];
+
+                chart.update();
+                console.log("removed data?");
+            }
+
+            //  removeData(myChart);
+
+
+            var dataPushed = {
+                data: [3000, 0, 0, 0, 0, 0, 133, 221, 783, 2478],
+                label: "New Data",
+                borderColor: "#3e95cd",
+                fill: false
+            };
+
+
+
+            //            addData(myChart, "new label", dataPushed);
+            //removeData(myChart);
+
+            //myChart.data.pop();
+            //            myChart.data.datasets[0].label = "work?";
+            // myChart.update();
+            
+            
+            
+            // Global variables 
+            var droppedSize = document.getElementById("packetDroppedList").getElementsByTagName("li").length - 1;
+            var packetsDroppedArray = new Array(droppedSize);
+
+            // Function to initialize a number of packets sent
+            function initPackets() {
+                packetsDroppedArray = [];
+                var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
+                var size = document.getElementById("packetList").getElementsByTagName("li").length;
+                //    alert("The form was submitted: " + numPackets + "  SIZE: "+ size); 
+                // Clear our packetlist by removing all child nodes
+
+                var myNode = document.getElementById("packetDroppedList");
+
+                while (document.getElementById("packetDroppedList").getElementsByTagName("li").length > 1) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+
+                myNode = document.getElementById("packetList");
+
+                while (document.getElementById("packetList").getElementsByTagName("li").length > 1) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+
+
+                // Add the number of packets selected
+                for (var i = 0; i < numPackets; i++) {
+                    var node = document.createElement("li");
+                    var textnode = document.createTextNode(i + 1);
+                    node.appendChild(textnode);
+                    document.getElementById("packetList").appendChild(node);
+                }
+            }
+
+            function AIMD(packetsDroppedArray) {
+                var congestionWindow = 1;
+                var RTT = 1;
+                var lastPacketSent = 1;
+                var totalToSend = Number(document.forms[0].numberOfPacketsSent.value);
+                var currentlySendArray = new Array();
+                var packetsDroppedArr = packetsDroppedArray.slice();
+                var outputData = new Array();
+
+
+                function isDropped(packetNum) {
+                    var dropped = false;
+
+                    for (var i = 0; i < packetsDroppedArr.length; i++) {
+                        if (packetsDroppedArr[i] == packetNum) {
+                            dropped = true;
+                            packetsDroppedArr.splice(i, 1);
+                            console.log("Removed: " + packetsDroppedArr[i]);
+                        }
+                    }
+
+                    return dropped;
+                }
+
+
+                while (lastPacketSent <= totalToSend) {
+                    var sendString = "Currently Sending: ";
+                    console.log("RTT: " + RTT);
+                    console.log("Congestion Window: " + congestionWindow + "\n");
+                    currentlySendArray = [];
+                    var dropped = false;
+
+                    for (var i = 0; i < congestionWindow; i++) {
+                        currentlySendArray[i] = lastPacketSent;
+                        //                        lastPacketSent++;
+
+
+
+                        if (dropped == false) {
+                            dropped = isDropped(currentlySendArray[i]);
+                            if (dropped == false)
+                                lastPacketSent++;
+                        }
+
+
+
+                        //                                        console.log("Last Packet Sent: " + lastPacketSent + "\t + "+i+ " =  "+ (lastPacketSent + i));
+
+                        if (currentlySendArray[i] <= totalToSend)
+                            sendString += (currentlySendArray[i] + ", ");
+                    }
+
+                    console.log(sendString + "\n");
+                    console.log("\n");
+
+
+
+                    if (dropped == false) {
+                        outputData.push(congestionWindow);
+                        congestionWindow++;
+
+                    } else {
+                        outputData.push(congestionWindow);
+                        congestionWindow = Math.floor(congestionWindow / 2);
+
+                    }
+                    RTT++;
+                }
+
+
+
+                return outputData;
+            }
+
+            function slowStart() {
+
+            }
+
+            // Click function for packet drops 
+            document.getElementById("packetList").addEventListener("click", function(e) {
+                var size = document.getElementById("packetDroppedList").getElementsByTagName("li").length;
+                // e.target is our targetted element.
+                if (e.target && e.target.nodeName == "LI") {
+                    e.target.style.backgroundColor = "#ff1b1b";
+                    e.target.style.color = "white";
+
+                    // push to our array of dropped packets
+                    packetsDroppedArray.push(Number(e.target.innerHTML));
+                    // sort our dropped packets
+                    packetsDroppedArray.sort(function(a, b) {
+                        return a - b
+                    });
+                    var output = "";
+                    for (var i = 0; i < packetsDroppedArray.length; i++) {
+                        output += packetsDroppedArray[i] + ", ";
+                    }
+
+                    //        // Clear our packetlist by removing all child nodes
+                    var myNode = document.getElementById("packetDroppedList");
+                    while (document.getElementById("packetDroppedList").getElementsByTagName("li").length > 1) {
+                        myNode.removeChild(myNode.lastChild);
+                    }
+                    //        // Add to packets dropped list 
+                    for (var i = 0; i < packetsDroppedArray.length; i++) {
+                        var node = document.createElement("li");
+                        var textnode = document.createTextNode(packetsDroppedArray[i]);
+                        node.appendChild(textnode);
+                        document.getElementById("packetDroppedList").appendChild(node);
+                    }
+
+                    // Run AIMD and Slow Start
+                    //AIMD(packetsDroppedArray);
+                    var ctx = document.getElementById("myChart").getContext('2d');
+                    var myNewChart = new Chart(ctx);
+
+//                      myChart.data.datasets[0].data = [0, 0, 0, 0, 0, 2000, 0, 0, 0, 0];
+                        var aimdData = AIMD(packetsDroppedArray);
+                        var aimdLabel = new Array();
+                        for(var i = 1; i < aimdData.length; i++){
+                            aimdLabel.push(i);
+                        }
+                        myChart.data.datasets[0].data = aimdData;
+                        myChart.data.datasets[0].data = aimdData;
+                         myChart.data.labels = aimdLabel;
+
+
+            myChart.update();
+
+                
+
+                }
+            });
+
+//                myChart.data.datasets[0].label = "work?";
+//                packetsDroppedArray = [10,25,34,45];
+//                myChart.data.datasets[0].data = AIMD(packetsDroppedArray);
+            //            myChart.data.datasets[0].data = [0, 0, 0, 0, 0, 6000, 0, 0, 0, 0];
+
+            
+
+        </script>
+
+        <!--
+        Script to Control and update charts
+        <script src="JavaScript/ChartControl.js"></script>
+-->
+
+        <script>
+//            var ctx = document.getElementById("myChart").getContext('2d');
+//            var rttNum = [1];
+//            for (var i = 2; i < 10; i++) {
+//                rttNum.push(i);
+//            }
+//            var myChart = new Chart(ctx, {
+//                type: 'line',
+//                data: {
+//                    labels: rttNum,
+//                    datasets: [{
+//                        data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
+//                        label: "AIMD",
+//                        borderColor: "#3e95cd",
+//                        fill: false
+//                    }, {
+//                        data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
+//                        label: "Slow Start",
+//                        borderColor: "#8e5ea2",
+//                        fill: false
+//                    }]
+//                },
+//                options: {
+//
+//                    title: {
+//                        display: true,
+//                        text: 'TCP Congestion Control Methods'
+//                    },
+//                    scales: {
+//                        xAxes: [{
+//                            scaleLabel: {
+//                                display: true,
+//                                labelString: 'RTT',
+//                                fontColor: '#555555',
+//                                fontStyle: "bold"
+//                            }
+//                        }],
+//                        yAxes: [{
+//                            scaleLabel: {
+//                                display: true,
+//                                labelString: 'Congestion Window',
+//                                fontColor: '#555555',
+//                                fontStyle: "bold"
+//                            }
+//                        }]
+//                    },
+//                    elements: {
+//                        line: {
+//                            tension: 0
+//                        }
+//                    }
+//                }
+//            });
+//
+//
+//            myChart.data.datasets[0].data = [0, 0, 0, 0, 0, 6000, 0, 0, 0, 0];
+//            myChart.update();
+//
+//            function addData(chart, label, data) {
+//                chart.data.labels.push(label);
+//                chart.data.datasets.forEach((dataset) => {
+//                    dataset.data.push(data);
+//                });
+//                chart.update();
+//            }
+//
+//            function removeData(chart) {
+//                chart.data.labels = [];
+//                chart.data.datasets[0] = [];
+//                chart.data.datasets[1] = [];
+//
+//                chart.update();
+//                console.log("removed data?");
+//            }
+//
+//            //  removeData(myChart);
+//
+//
+//            var dataPushed = {
+//                data: [3000, 0, 0, 0, 0, 0, 133, 221, 783, 2478],
+//                label: "New Data",
+//                borderColor: "#3e95cd",
+//                fill: false
+//            };
+//
+//
+//
+//            //            addData(myChart, "new label", dataPushed);
+//            //removeData(myChart);
+//
+//            //myChart.data.pop();
+//            //            myChart.data.datasets[0].label = "work?";
+//            // myChart.update();
+
         </script>
 
     </div>
 
+
+    <!------------------------------------------------------------------------------------------------->
+
 </body>
+
 </html>
