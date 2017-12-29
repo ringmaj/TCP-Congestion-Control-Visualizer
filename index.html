@@ -74,7 +74,7 @@
 
 
     <!-- Packet List-->
-    <div id="packetSelector">
+    <div id="packetSelector" class="noselect">
 
         <!------------------------------------------------------------------------------------------------->
         <!-- Select how many packets are being sent-->
@@ -111,8 +111,7 @@
 
 
         <script>
-            
-                        var ctx = document.getElementById("myChart").getContext('2d');
+            var ctx = document.getElementById("myChart").getContext('2d');
             var rttNum = [1];
             for (var i = 2; i < 10; i++) {
                 rttNum.push(i);
@@ -121,13 +120,15 @@
                 type: 'line',
                 data: {
                     labels: rttNum,
-                    datasets: [{
-                        data: [0,0,0,0,0,0,0,0,0,0],
+                    datasets: [
+//                         {fill: 'origin'},
+                        {
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         label: "AIMD",
                         borderColor: "#3e95cd",
                         fill: false
                     }, {
-                        data: [0,0,0,0,0,0,0,0,0,0],
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         label: "Slow Start",
                         borderColor: "#8e5ea2",
                         fill: false
@@ -166,7 +167,7 @@
             });
 
 
-     
+
 
             function addData(chart, label, data) {
                 chart.data.labels.push(label);
@@ -203,9 +204,9 @@
             //myChart.data.pop();
             //            myChart.data.datasets[0].label = "work?";
             // myChart.update();
-            
-            
-            
+
+
+
             // Global variables 
             var droppedSize = document.getElementById("packetDroppedList").getElementsByTagName("li").length - 1;
             var packetsDroppedArray = new Array(droppedSize);
@@ -238,6 +239,16 @@
                     node.appendChild(textnode);
                     document.getElementById("packetList").appendChild(node);
                 }
+
+                var aimdData = AIMD(packetsDroppedArray);
+                var aimdLabel = new Array();
+                for (var i = 1; i < aimdData.length; i++) {
+                    aimdLabel.push(i);
+                }
+                myChart.data.datasets[0].data = aimdData;
+                myChart.data.datasets[0].data = aimdData;
+                myChart.data.labels = aimdLabel;
+                myChart.update();
             }
 
             function AIMD(packetsDroppedArray) {
@@ -263,6 +274,10 @@
 
                     return dropped;
                 }
+                
+                
+
+
 
 
                 while (lastPacketSent <= totalToSend) {
@@ -271,11 +286,54 @@
                     console.log("Congestion Window: " + congestionWindow + "\n");
                     currentlySendArray = [];
                     var dropped = false;
+                    
+                    
+                    
+                   
+                    
+                    // Sending Output --------------------------------------------------------------
+                    var myNode = document.getElementById("sendOutPutList");
+                    
 
+                    
+//                     if(document.getElementById("outputPacketList")){
+//                         myNode.removeChild(myNode.firstChild);
+//                    }
+                    
+                     myNode = document.getElementById("sendOutPutList");
+
+                    
+                    var ul=document.createElement("ul");
+                    ul.setAttribute("id", "outputPacketList");
+                    ul.setAttribute("class", "outPutListDiv");
+
+                    
+                    
+                    //----------------------------------------------------------------------------------
+                    var textnode = document.createTextNode("RTT #" + RTT);
+                    var node = document.createElement("li");
+                    node.setAttribute("id", "packetsSent");
+                    node.appendChild(textnode);
+                    ul.appendChild(node);
+                    
                     for (var i = 0; i < congestionWindow; i++) {
                         currentlySendArray[i] = lastPacketSent;
-                        //                        lastPacketSent++;
-
+                        
+                         textnode = document.createTextNode(currentlySendArray[i]);
+                         node = document.createElement("li");
+                        node.appendChild(textnode);
+                        
+                        node.setAttribute("class", "droppedPacketRed");
+                        
+                        if(isDropped(currentlySendArray[i])){
+                              node.style.backgroundColor = "#d11e1e";
+                        node.style.color = "white";
+                        }
+                      
+                        if (currentlySendArray[i] <= totalToSend)
+                         ul.appendChild(node);
+                        
+                        
 
 
                         if (dropped == false) {
@@ -291,6 +349,8 @@
                         if (currentlySendArray[i] <= totalToSend)
                             sendString += (currentlySendArray[i] + ", ");
                     }
+                    
+                    myNode.appendChild(ul);
 
                     console.log(sendString + "\n");
                     console.log("\n");
@@ -321,21 +381,45 @@
             // Click function for packet drops 
             document.getElementById("packetList").addEventListener("click", function(e) {
                 var size = document.getElementById("packetDroppedList").getElementsByTagName("li").length;
+                var alreadyDropped = false;
+                
                 // e.target is our targetted element.
                 if (e.target && e.target.nodeName == "LI") {
                     e.target.style.backgroundColor = "#ff1b1b";
                     e.target.style.color = "white";
 
+              
+                    
+                        for (var i = 0; i < packetsDroppedArray.length; i++) {
+                        if (packetsDroppedArray[i] == Number(e.target.innerHTML)) {
+                            alreadyDropped = true;
+                        }
+                    }
+                    
+                    
+                    
+                    if(alreadyDropped == false){
                     // push to our array of dropped packets
                     packetsDroppedArray.push(Number(e.target.innerHTML));
+                    }
+                    else {
+                    
+                    var index = packetsDroppedArray.indexOf(Number(e.target.innerHTML));
+                    packetsDroppedArray.splice(index, 1);
+                    e.target.style.backgroundColor = "#e2e2e2";
+                    e.target.style.color = "black";
+                    }
+                    
+                    
                     // sort our dropped packets
                     packetsDroppedArray.sort(function(a, b) {
                         return a - b
                     });
-                    var output = "";
-                    for (var i = 0; i < packetsDroppedArray.length; i++) {
-                        output += packetsDroppedArray[i] + ", ";
-                    }
+                    
+//                    var output = "";
+//                    for (var i = 0; i < packetsDroppedArray.length; i++) {
+//                        output += packetsDroppedArray[i] + ", ";
+//                    }
 
                     //        // Clear our packetlist by removing all child nodes
                     var myNode = document.getElementById("packetDroppedList");
@@ -351,137 +435,95 @@
                     }
 
                     // Run AIMD and Slow Start
-                    //AIMD(packetsDroppedArray);
-                    var ctx = document.getElementById("myChart").getContext('2d');
-                    var myNewChart = new Chart(ctx);
-
-//                      myChart.data.datasets[0].data = [0, 0, 0, 0, 0, 2000, 0, 0, 0, 0];
-                        var aimdData = AIMD(packetsDroppedArray);
-                        var aimdLabel = new Array();
-                        for(var i = 1; i < aimdData.length; i++){
-                            aimdLabel.push(i);
-                        }
-                        myChart.data.datasets[0].data = aimdData;
-                        myChart.data.datasets[0].data = aimdData;
-                         myChart.data.labels = aimdLabel;
+                    var aimdData = AIMD(packetsDroppedArray);
+                    var aimdLabel = new Array();
+                    for (var i = 1; i < aimdData.length; i++) {
+                        aimdLabel.push(i);
+                    }
+                    myChart.data.datasets[0].data = aimdData;
+                    myChart.data.labels = aimdLabel;
+                    myChart.update();
 
 
-            myChart.update();
-
-                
 
                 }
             });
-
-//                myChart.data.datasets[0].label = "work?";
-//                packetsDroppedArray = [10,25,34,45];
-//                myChart.data.datasets[0].data = AIMD(packetsDroppedArray);
-            //            myChart.data.datasets[0].data = [0, 0, 0, 0, 0, 6000, 0, 0, 0, 0];
-
-            
-
         </script>
 
-        <!--
-        Script to Control and update charts
-        <script src="JavaScript/ChartControl.js"></script>
--->
+    </div>
 
-        <script>
-//            var ctx = document.getElementById("myChart").getContext('2d');
-//            var rttNum = [1];
-//            for (var i = 2; i < 10; i++) {
-//                rttNum.push(i);
-//            }
-//            var myChart = new Chart(ctx, {
-//                type: 'line',
-//                data: {
-//                    labels: rttNum,
-//                    datasets: [{
-//                        data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
-//                        label: "AIMD",
-//                        borderColor: "#3e95cd",
-//                        fill: false
-//                    }, {
-//                        data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
-//                        label: "Slow Start",
-//                        borderColor: "#8e5ea2",
-//                        fill: false
-//                    }]
-//                },
-//                options: {
-//
-//                    title: {
-//                        display: true,
-//                        text: 'TCP Congestion Control Methods'
-//                    },
-//                    scales: {
-//                        xAxes: [{
-//                            scaleLabel: {
-//                                display: true,
-//                                labelString: 'RTT',
-//                                fontColor: '#555555',
-//                                fontStyle: "bold"
-//                            }
-//                        }],
-//                        yAxes: [{
-//                            scaleLabel: {
-//                                display: true,
-//                                labelString: 'Congestion Window',
-//                                fontColor: '#555555',
-//                                fontStyle: "bold"
-//                            }
-//                        }]
-//                    },
-//                    elements: {
-//                        line: {
-//                            tension: 0
-//                        }
-//                    }
-//                }
-//            });
-//
-//
-//            myChart.data.datasets[0].data = [0, 0, 0, 0, 0, 6000, 0, 0, 0, 0];
-//            myChart.update();
-//
-//            function addData(chart, label, data) {
-//                chart.data.labels.push(label);
-//                chart.data.datasets.forEach((dataset) => {
-//                    dataset.data.push(data);
-//                });
-//                chart.update();
-//            }
-//
-//            function removeData(chart) {
-//                chart.data.labels = [];
-//                chart.data.datasets[0] = [];
-//                chart.data.datasets[1] = [];
-//
-//                chart.update();
-//                console.log("removed data?");
-//            }
-//
-//            //  removeData(myChart);
-//
-//
-//            var dataPushed = {
-//                data: [3000, 0, 0, 0, 0, 0, 133, 221, 783, 2478],
-//                label: "New Data",
-//                borderColor: "#3e95cd",
-//                fill: false
-//            };
-//
-//
-//
-//            //            addData(myChart, "new label", dataPushed);
-//            //removeData(myChart);
-//
-//            //myChart.data.pop();
-//            //            myChart.data.datasets[0].label = "work?";
-//            // myChart.update();
+    <div id="analysisSection">
 
-        </script>
+        <div id="aimdAnalysis">
+            <div class="analysisTitle">
+                <p>AIMD Analysis</p>
+                
+                <div class="SentDroppedDiv">
+                <p>Packages Sent: <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                <p>Packages Dropped: <p id="aimdPackSent" class="analysisPackInfo noBorder">5</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Packages Size: <p id="aimdPackSent" class="analysisPackInfo noBorder">1500 KB</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Largest Congestion Window: <p id="aimdPackSent" class="analysisPackInfo noBorder">16</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Max RTT #: <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                <p>Total Transmission Time: <p id="aimdPackSent" class="analysisPackInfo noBorder">51 ms</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Throughput: <p id="aimdPackSent" class="analysisPackInfo noBorder">16 bps</p>
+                </div>
+                
+                <div class="SentDroppedDiv" id="outputList">
+                <p>Sending Output:</p>
+                    <div id="sendOutPutList">
+   
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+
+        <div id="slowStartAnalysis">
+            <div class="analysisTitle">
+                <p>Slow Start Analysis</p>
+                
+                                <div class="SentDroppedDiv">
+                <p>Packages Sent: <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                <p>Packages Dropped: <p id="aimdPackSent" class="analysisPackInfo">5</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Packages Size: <p id="aimdPackSent" class="analysisPackInfo noBorder">1500 KB</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Largest Congestion Window: <p id="aimdPackSent" class="analysisPackInfo noBorder">16</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Max RTT #: <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                <p>Total Transmission Time: <p id="aimdPackSent" class="analysisPackInfo">51 ms</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Throughput: <p id="aimdPackSent" class="analysisPackInfo noBorder">16 bps</p>
+                </div>
+                
+                <div class="SentDroppedDiv">
+                <p>Sending Output:</p>
+                </div>
+            </div>
+        </div>
+
+
 
     </div>
 
