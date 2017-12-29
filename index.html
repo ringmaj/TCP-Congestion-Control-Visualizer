@@ -323,25 +323,32 @@
                          node = document.createElement("li");
                         node.appendChild(textnode);
                         
-                        node.setAttribute("class", "droppedPacketRed");
+//                        node.setAttribute("class", "droppedPacketRed");
                         
-                        if(isDropped(currentlySendArray[i])){
-                              node.style.backgroundColor = "#d11e1e";
-                        node.style.color = "white";
-                        }
-                      
-                        if (currentlySendArray[i] <= totalToSend)
-                         ul.appendChild(node);
+//                        console.log("currentlySendArray[i] = "+ currentlySendArray[i]);
+//                        if(isDropped(currentlySendArray[i]) == true){
+//                              node.style.backgroundColor = "#d11e1e";
+//                              node.style.color = "white";
+//                        }
+//                      
+
                         
                         
 
 
                         if (dropped == false) {
                             dropped = isDropped(currentlySendArray[i]);
-                            if (dropped == false)
+                            if (dropped == false){
                                 lastPacketSent++;
                         }
+                            else {
+                                 node.style.backgroundColor = "#d11e1e";
+                              node.style.color = "white";
+                            }
+                        }
 
+                        if (currentlySendArray[i] <= totalToSend)
+                         ul.appendChild(node);
 
 
                         //                                        console.log("Last Packet Sent: " + lastPacketSent + "\t + "+i+ " =  "+ (lastPacketSent + i));
@@ -350,7 +357,7 @@
                             sendString += (currentlySendArray[i] + ", ");
                     }
                     
-                    myNode.appendChild(ul);
+                   myNode.appendChild(ul);
 
                     console.log(sendString + "\n");
                     console.log("\n");
