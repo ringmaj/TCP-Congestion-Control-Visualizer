@@ -267,6 +267,7 @@ overflow:auto;
 #sendOutPutList #packetsSent {
     padding-right: 10px;
     border-right: 1.5px solid #888888;
+    
 
 }
 
@@ -274,6 +275,13 @@ overflow:auto;
 /*    background-color: #e6e6e6 !important;*/
     border-bottom: 1.5px solid #c6c6c6 !important;
 
+}
+
+
+
+#outputPacketList {
+    border-bottom: 1.5px solid #c6c6c6 !important;
+    margin-bottom: 6px;
 }
 
 
