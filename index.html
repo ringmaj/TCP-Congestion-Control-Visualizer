@@ -79,12 +79,35 @@
         <!------------------------------------------------------------------------------------------------->
         <!-- Select how many packets are being sent-->
         <div class="conatainer numPacketsSelector">
-            <div id="numPacketsField">Number of packets sent <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
-            </div>
 
-            <form id="numPacketSentForm" onsubmit="initPackets(); return false">
-                <input id="numberField" type="number" name="numberOfPacketsSent" placeholder="?">
+            <!--            Number of Packets sent-->
+            <div id="numPacketsField" class="generalInputField">Number of packets sent <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+            </div>
+            <form id="numPacketSentForm" class="inputValue" onsubmit="initPackets(); return false">
+                <input id="numPacketsSentField" class="inputBorder numberField" type="number" name="numberOfPacketsSent" placeholder="?">
             </form>
+
+
+            <!--            packet size-->
+            <div id="numPacketsField" class="generalInputField">Packet size (KB) <span class="glyphicon glyphicon-sort" aria-hidden="true">   </span>
+            </div>
+            <form id="packageSizeForm" class="inputValue" onsubmit="initPackets(); return false">
+                <input id="packageSizeField" class="inputBorder numberField" type="number" name="packageSize" placeholder="?">
+            </form>
+
+            <!--            RTT time-->
+            <div id="numPacketsField" class="generalInputField">RTT Time (ms) <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+            </div>
+            <form id="rttForm" class="inputValue" onsubmit="initPackets(); return false">
+                <input id="rttField" class="inputBorder numberField" type="number" name="rtt" placeholder="?">
+            </form>
+
+
+            <button type="button" id="startButton" onclick="initPackets(); return false">Start Program</button>
+
+
+
+
         </div>
         <!------------------------------------------------------------------------------------------------->
         <ul id="packetList">
@@ -214,6 +237,12 @@
 
             // Function to initialize a number of packets sent
             function initPackets() {
+
+                //                // submit forms 
+                //                document.getElementById("form1").submit();
+                //                document.getElementById("form2").submit();
+
+
                 packetsDroppedArray = [];
                 var numPackets = Number(document.forms[0].numberOfPacketsSent.value);
                 var size = document.getElementById("packetList").getElementsByTagName("li").length;
@@ -260,6 +289,7 @@
                 var currentlySendArray = new Array();
                 var packetsDroppedArr = packetsDroppedArray.slice();
                 var outputData = new Array();
+                var maxCWindow = 1;
 
 
                 function isDropped(packetNum) {
@@ -283,10 +313,14 @@
 
                 while (lastPacketSent <= totalToSend) {
                     var sendString = "Currently Sending: ";
+                    var saveLastPacketSent = lastPacketSent;
                     console.log("RTT: " + RTT);
                     console.log("Congestion Window: " + congestionWindow + "\n");
                     currentlySendArray = [];
                     var dropped = false;
+
+                    if (congestionWindow > maxCWindow)
+                        maxCWindow = congestionWindow;
 
 
 
@@ -311,18 +345,28 @@
 
 
                     //----------------------------------------------------------------------------------
-                    var textnode = document.createTextNode("RTT #" + RTT);
+                    var textnode = document.createTextNode("RTT: " + RTT);
                     var node = document.createElement("li");
                     node.setAttribute("id", "packetsSent");
                     node.appendChild(textnode);
                     ul.appendChild(node);
 
+                    // Add window --------------------------------------------------------------
+                    textnode = document.createTextNode("cwnd: " + congestionWindow);
+                    //                    var arrow = '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>';
+                    node = document.createElement("li");
+                    node.setAttribute("id", "cwnd");
+                    node.appendChild(textnode);
+                    node.style.backgroundColor = "#b9d4ff";
+                    node.style.color = "#505050";
+                    ul.appendChild(node);
+
                     // Add Arrow -----------------------------------
 
                     textnode = document.createTextNode("--------->");
-                    var arrow = '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>';
+                    //                    var arrow = '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>';
                     node = document.createElement("li");
-//                    node.setAttribute("id", "packetsSent");
+                    //                    node.setAttribute("id", "packetsSent");
                     node.appendChild(textnode);
                     node.style.backgroundColor = "#ffffff";
                     node.style.color = "#505050";
@@ -331,7 +375,18 @@
                     for (var i = 0; i < congestionWindow; i++) {
                         currentlySendArray[i] = lastPacketSent;
 
-                        textnode = document.createTextNode(currentlySendArray[i]);
+
+
+                        if (i > 0 && (currentlySendArray[i] == currentlySendArray[i - 1])) {
+                            textnode = document.createTextNode(currentlySendArray[i] + 1);
+                            currentlySendArray[i]++;
+                            console.log("REPEAT!");
+                        } else {
+                            if (currentlySendArray[i] < currentlySendArray[i - 1])
+                                currentlySendArray[i] = currentlySendArray[i - 1] + 1;
+                            textnode = document.createTextNode(currentlySendArray[i]);
+
+                        }
                         node = document.createElement("li");
                         node.appendChild(textnode);
 
@@ -386,6 +441,80 @@
                     }
                     RTT++;
                 }
+
+
+                // Update Analysis Data Section ----------------------------------------------------------
+
+                // Update packages sent -------------------------------------------------------
+                myNode = document.getElementById("aimdPackSent");
+                myNode.innerHTML = document.forms[0].numberOfPacketsSent.value;
+
+                // Update packages dropped -------------------------------------------------------
+                myNode = document.getElementById("aimdPackDropped");
+                myNode.innerHTML = packetsDroppedArray.length;
+
+                // Update packet size -------------------------------------------------------
+                myNode = document.getElementById("aimdPackSize");
+                myNode.innerHTML = document.forms[1].packageSize.value + " KB"
+
+                // Update packages max congestion window -------------------------------------------------------
+                myNode = document.getElementById("aimdMaxCWindow");
+                myNode.innerHTML = maxCWindow;
+
+                // Update packages max congestion RTT -------------------------------------------------------
+                myNode = document.getElementById("aimdMaxRTT");
+                myNode.innerHTML = RTT - 1;
+
+                // Update total transmission time -------------------------------------------------------
+                var transmissionTimeUnits = " ms";
+                var rttTime = Number(document.forms[2].rtt.value);
+                var transmissionTime = rttTime * (RTT - 1);
+                myNode = document.getElementById("aimdTransmissionTime");
+                myNode.innerHTML = "( " + maxCWindow + " RTT )";
+                myNode = document.getElementById("aimdRTTcalc");
+                myNode.innerHTML = document.forms[2].rtt.value + " ms";
+                myNode = document.getElementById("aimdTotalTransmissionTime");
+                if (transmissionTime == 1000) {
+                    transmissionTimeUnits = " second";
+                    transmissionTime = transmissionTime / 1000;
+                }
+                if (transmissionTime > 1000) {
+                    transmissionTimeUnits = " seconds";
+                    transmissionTime = transmissionTime / 1000;
+                }
+                myNode.innerHTML = " = " + transmissionTime + transmissionTimeUnits;
+
+
+                // Update packages max congestion RTT -------------------------------------------------------
+                var bytes = Number(document.forms[1].packageSize.value) * 1000;
+                var bits = bytes * 8;
+                var throughput;
+                var units = " b/s"
+                myNode = document.getElementById("aimdThroughput");
+                transmissionTime = rttTime * (RTT - 1);
+                transmissionTime = transmissionTime / 1000;
+                throughput = bits / transmissionTime;
+
+                if (throughput < 1000) {
+                    units = " b/s";
+                } else if (throughput < 1000000) {
+                    throughput = throughput / 1000;
+                    units = " kb/s";
+                } else if (throughput < 1000000000) {
+                    throughput = throughput / 1000000;
+                    units = " mb/s";
+                } else if (throughput < 1000000000000) {
+                    throughput = throughput / 1000000000;
+                    units = " gb/s";
+                }
+
+                myNode.innerHTML = bits + " bits / " + transmissionTime + " seconds = " + (throughput).toFixed(2) + units;
+
+
+
+
+
+
 
 
 
@@ -454,7 +583,7 @@
                     // Run AIMD and Slow Start
                     var aimdData = AIMD(packetsDroppedArray);
                     var aimdLabel = new Array();
-                    for (var i = 1; i < aimdData.length; i++) {
+                    for (var i = 1; i <= aimdData.length; i++) {
                         aimdLabel.push(i);
                     }
                     myChart.data.datasets[0].data = aimdData;
@@ -477,31 +606,40 @@
 
                 <div class="SentDroppedDiv">
                     <p>Packages Sent:
-                        <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                        <p id="aimdPackSent" class="analysisPackInfo analysisAnswer">46</p>
                         <p>Packages Dropped:
-                            <p id="aimdPackSent" class="analysisPackInfo noBorder">5</p>
+                            <p id="aimdPackDropped" class="analysisPackInfo noBorder analysisAnswer">5</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Packages Size:
-                        <p id="aimdPackSent" class="analysisPackInfo noBorder">1500 KB</p>
+                        <p id="aimdPackSize" class="analysisPackInfo noBorder analysisAnswer">1500 KB</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Largest Congestion Window:
-                        <p id="aimdPackSent" class="analysisPackInfo noBorder">16</p>
+                        <p id="aimdMaxCWindow" class="analysisPackInfo noBorder analysisAnswer">16</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Max RTT #:
-                        <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                        <p id="aimdMaxRTT" class="analysisPackInfo analysisAnswer">46</p>
                         <p>Total Transmission Time:
-                            <p id="aimdPackSent" class="analysisPackInfo noBorder">51 ms</p>
+                            <p id="aimdTransmissionTime" class="analysisPackInfo noBorder analysisAnswer"> ( 19 RTT ) x</p>
+                            <div class="fraction">
+                                <span class="fup" id="aimdRTTcalc">100 ms</span>
+                                <span class="bar">/</span>
+                                <span class="fdn">RTT</span>
+                            </div>
+
+
+                            <p id="aimdTotalTransmissionTime" class="analysisPackInfo noBorder analysisAnswer"> = 51 ms</p>
+
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Throughput:
-                        <p id="aimdPackSent" class="analysisPackInfo noBorder">16 bps</p>
+                        <p id="aimdThroughput" class="analysisPackInfo noBorder analysisAnswer">16 bps</p>
                 </div>
 
                 <div class="SentDroppedDiv" id="outputList">
@@ -515,37 +653,44 @@
             </div>
         </div>
 
+
+
+
+
+
+
+
         <div id="slowStartAnalysis">
             <div class="analysisTitle">
                 <p>Slow Start Analysis</p>
 
                 <div class="SentDroppedDiv">
                     <p>Packages Sent:
-                        <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                        <p id="analysisAnswer" class="analysisPackInfo">46</p>
                         <p>Packages Dropped:
-                            <p id="aimdPackSent" class="analysisPackInfo">5</p>
+                            <p id="analysisAnswer" class="analysisPackInfo">5</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Packages Size:
-                        <p id="aimdPackSent" class="analysisPackInfo noBorder">1500 KB</p>
+                        <p id="analysisAnswer" class="analysisPackInfo noBorder">1500 KB</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Largest Congestion Window:
-                        <p id="aimdPackSent" class="analysisPackInfo noBorder">16</p>
+                        <p id="analysisAnswer" class="analysisPackInfo noBorder">16</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Max RTT #:
-                        <p id="aimdPackSent" class="analysisPackInfo">46</p>
+                        <p id="analysisAnswer" class="analysisPackInfo">46</p>
                         <p>Total Transmission Time:
-                            <p id="aimdPackSent" class="analysisPackInfo">51 ms</p>
+                            <p id="analysisAnswer" class="analysisPackInfo">51 ms</p>
                 </div>
 
                 <div class="SentDroppedDiv">
                     <p>Throughput:
-                        <p id="aimdPackSent" class="analysisPackInfo noBorder">16 bps</p>
+                        <p id="analysisAnswer" class="analysisPackInfo noBorder">16 bps</p>
                 </div>
 
                 <div class="SentDroppedDiv">
