@@ -29,6 +29,13 @@
     background-color: white;
 }
 
+#startButton {
+    height: 40px;
+    color: white;
+    background-color: #69b969;
+    border-radius: 5px;
+    
+}
 
 #packetSelector {
 
@@ -82,7 +89,7 @@
 
 
 #packetsSent,
-#packetsDropped, #sendOutPutList #packetsSent {
+#packetsDropped, #sendOutPutList #packetsSent, #cwnd {
     background-color: var(--main-color) !important;
     color: white;
     padding: 10px;
@@ -112,7 +119,7 @@
     border-bottom: 1.5px solid #dedede;
 }
 
-#numPacketsField {
+.generalInputField {
     display: inline-block;
     padding: 10px;
     background-color: var(--main-color);
@@ -128,10 +135,10 @@
 
 #numPacketSentForm {
     display: inline-block;
-    text-align: center
+    text-align: center;
 }
 
-#numberField {
+.numberField {
     width: 75px;
     margin: auto;
     height: 40px;
@@ -142,9 +149,11 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
 
     opacity: 1;
+    
 
 
 }
+
 
 
 #myChart {
@@ -193,14 +202,20 @@ input[type=number]::-webkit-outer-spin-button {
     color: #5a5a5a !important;
     font-family: 'Roboto', sans-serif;
     font-size: 15px !important;
+    text-align: center !important;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 14px !important;
 }
 
+.SentDroppedDiv:last-child {
+    border-bottom: none;
+}
 
-#aimdPackSent {
+.analysisAnswer {
     margin-left: 5px;
     border-right: 1.5px solid #d8d8d8;
     font-weight: bold;
-    
 }
 
 
@@ -266,9 +281,10 @@ overflow:auto;
 
 #sendOutPutList #packetsSent {
     padding-right: 10px;
-    border-right: 1.5px solid #888888;
-    
+/*    border-right: 1.5px solid #888888;*/
+        border-right: 1.5px solid #e27171;
 
+    
 }
 
 .outPutListDiv {
@@ -289,6 +305,59 @@ overflow:auto;
 /*    background-color: #006bfd !important;*/
 }
 
+#cwnd {
+/*    b2ffb2*/
+    background-color: #ffd38d !important;
+    color:white;
+    
+     padding-right: 10px;
+    border-right: 1.5px solid #f0ac3e;
+        
+    
+}
+
+.glyphicon {
+    margin-left: 5px;
+}
+
+.inputValue {
+    margin-right: 25px;
+    border-right: 1.5px solid #dedede;
+    padding-right: 20px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+
+}
+
+.inputBorder {
+  
+}
+
+.fraction {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle; 
+  letter-spacing: 0.001em;
+  text-align: center;
+  font-size: 10px;
+    margin-right: 10px;
+    
+     margin-top: auto;
+    margin-bottom: auto;
+  }
+.fraction > span { 
+  display: block; 
+  padding: 0.1em; 
+  }
+.fraction span.fdn {border-top: thin solid black;}
+.fraction span.bar {display: none;}
+
+#aimdTransmissionTime {
+    font-weight: 100;
+      font-size: 12px !important;
+
+}
 
 html {
     padding-top: 60px;
