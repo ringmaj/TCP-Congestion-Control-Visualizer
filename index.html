@@ -89,7 +89,7 @@
 
 
             <!--            packet size-->
-            <div id="numPacketsField" class="generalInputField">Packet size (KB) <span class="glyphicon glyphicon-sort" aria-hidden="true">   </span>
+            <div id="numPacketsField" class="generalInputField">Packet size (Bytes) <span class="glyphicon glyphicon-sort" aria-hidden="true">   </span>
             </div>
             <form id="packageSizeForm" class="inputValue" onsubmit="initPackets(); return false">
                 <input id="packageSizeField" class="inputBorder numberField" type="number" name="packageSize" placeholder="?">
@@ -270,15 +270,16 @@
                     document.getElementById("packetList").appendChild(node);
                 }
 
-                var aimdData = AIMD(packetsDroppedArray);
-                var aimdLabel = new Array();
-                for (var i = 1; i < aimdData.length; i++) {
-                    aimdLabel.push(i);
-                }
-                myChart.data.datasets[0].data = aimdData;
-                myChart.data.datasets[0].data = aimdData;
-                myChart.data.labels = aimdLabel;
-                myChart.update();
+                               // Run AIMD and Slow Start
+                    var aimdData = AIMD(packetsDroppedArray);
+                    var aimdLabel = new Array();
+
+                    for (var i = 1; i <= aimdData.length; i++) {
+                        aimdLabel.push(i);
+                    }
+                    myChart.data.datasets[0].data = aimdData;
+                    myChart.data.labels = aimdLabel;
+                    myChart.update();
             }
 
             function AIMD(packetsDroppedArray) {
@@ -455,7 +456,23 @@
 
                 // Update packet size -------------------------------------------------------
                 myNode = document.getElementById("aimdPackSize");
-                myNode.innerHTML = document.forms[1].packageSize.value + " KB"
+                var units = " B"
+                var packetSize = Number(document.forms[1].packageSize.value);
+                if (packetSize < 1000) {
+                    units = " B";
+                } else if (packetSize < 1000000) {
+                    packetSize = packetSize / 1000;
+                    units = " KB";
+                } else if (packetSize < 1000000000) {
+                    packetSize = packetSize / 1000000;
+                    units = " MB";
+                } else if (packetSize < 1000000000000) {
+                    packetSize = packetSize / 1000000000;
+                    units = " GB";
+                }
+                
+                myNode.innerHTML = packetSize + units;
+
 
                 // Update packages max congestion window -------------------------------------------------------
                 myNode = document.getElementById("aimdMaxCWindow");
@@ -486,10 +503,11 @@
 
 
                 // Update packages max congestion RTT -------------------------------------------------------
-                var bytes = Number(document.forms[1].packageSize.value) * 1000;
-                var bits = bytes * 8;
+                var bytes = Number(document.forms[1].packageSize.value);
+                var numberOfPacketsSent = Number(document.forms[0].numberOfPacketsSent.value);
+                var bits = numberOfPacketsSent * bytes * 8;
                 var throughput;
-                var units = " b/s"
+                units = " b/s"
                 myNode = document.getElementById("aimdThroughput");
                 transmissionTime = rttTime * (RTT - 1);
                 transmissionTime = transmissionTime / 1000;
@@ -583,6 +601,7 @@
                     // Run AIMD and Slow Start
                     var aimdData = AIMD(packetsDroppedArray);
                     var aimdLabel = new Array();
+
                     for (var i = 1; i <= aimdData.length; i++) {
                         aimdLabel.push(i);
                     }
