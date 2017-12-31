@@ -309,6 +309,10 @@
 
 
 
+                              var myNode = document.getElementById("sendOutPutList");
+                    while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+}
 
 
 
@@ -328,15 +332,9 @@
 
 
                     // Sending Output --------------------------------------------------------------
-                    var myNode = document.getElementById("sendOutPutList");
+      
 
-
-
-                    //                     if(document.getElementById("outputPacketList")){
-                    //                         myNode.removeChild(myNode.firstChild);
-                    //                    }
-
-                    myNode = document.getElementById("sendOutPutList");
+//                    myNode = document.getElementById("sendOutPutList");
 
 
                     var ul = document.createElement("ul");
@@ -487,7 +485,7 @@
                 var rttTime = Number(document.forms[2].rtt.value);
                 var transmissionTime = rttTime * (RTT - 1);
                 myNode = document.getElementById("aimdTransmissionTime");
-                myNode.innerHTML = "( " + maxCWindow + " RTT )";
+                myNode.innerHTML = "( " + (RTT - 1) + " RTT )";
                 myNode = document.getElementById("aimdRTTcalc");
                 myNode.innerHTML = document.forms[2].rtt.value + " ms";
                 myNode = document.getElementById("aimdTotalTransmissionTime");
