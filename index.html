@@ -239,24 +239,32 @@
                 // Run AIMD --------------------------------------------------------
                 var aimdData = AIMD(packetsDroppedArray);
                 var aimdLabel = new Array();
-
-                for (var i = 1; i <= aimdData.length; i++) {
-                    aimdLabel.push(i);
-                }
+                var labelLength;
                 myChart.data.datasets[0].data = aimdData;
-                myChart.data.labels = aimdLabel;
                 myChart.update();
 
                 // Run Slow Start --------------------------------------------------
                 var slowStartData = slowStart(packetsDroppedArray);
                 var slowStartLabel = new Array();
+                myChart.data.datasets[1].data = slowStartData;
+                myChart.update();
 
-                for (var i = 1; i <= slowStartData.length; i++) {
+
+                // Add labels ------------------------------------------------------
+
+                if (aimdData.length > slowStartData.length)
+                    labelLength = aimdData.length;
+                else
+                    labelLength = slowStartData.length;
+
+                for (var i = 1; i <= labelLength; i++) {
                     slowStartLabel.push(i);
                 }
-                myChart.data.datasets[1].data = slowStartData;
+
                 myChart.data.labels = slowStartLabel;
                 myChart.update();
+
+
             }
 
             function AIMD(packetsDroppedArray) {
@@ -615,22 +623,22 @@
                         if (currentlySendArray[i] <= totalToSend)
                             sendString += (currentlySendArray[i] + ", ");
 
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
                         if (state == "EXPONENTIAL_INCREASE") {
 
                             if (congestionWindow >= congestionThreshold) {
                                 state = "ADDITIVE_INCREASE";
-//                                break;
+                                //                                break;
                             }
 
                         }
-                        
-                        
-                        
+
+
+
                     }
 
                     myNode.appendChild(ul);
@@ -646,9 +654,9 @@
                         if (state == "INITIAL_INCREASE") {
                             congestionWindow = congestionWindow * 2;
                         } else if (state == "EXPONENTIAL_INCREASE") {
-                            
-                            if(congestionWindow * 2 <= congestionThreshold)
-                            congestionWindow = congestionWindow * 2;
+
+                            if (congestionWindow * 2 <= congestionThreshold)
+                                congestionWindow = congestionWindow * 2;
                             else {
                                 congestionWindow = congestionThreshold;
                             }
@@ -808,28 +816,33 @@
                         document.getElementById("packetDroppedList").appendChild(node);
                     }
 
-                    // Run AIMD ---------------------------------------------------------------------------------------------------
-                    var aimdData = AIMD(packetsDroppedArray);
-                    var aimdLabel = new Array();
+                  // Run AIMD --------------------------------------------------------
+                var aimdData = AIMD(packetsDroppedArray);
+                var aimdLabel = new Array();
+                var labelLength;
+                myChart.data.datasets[0].data = aimdData;
+                myChart.update();
 
-                    for (var i = 1; i <= aimdData.length; i++) {
-                        aimdLabel.push(i);
-                    }
-                    myChart.data.datasets[0].data = aimdData;
-                    myChart.data.labels = aimdLabel;
-                    myChart.update();
+                // Run Slow Start --------------------------------------------------
+                var slowStartData = slowStart(packetsDroppedArray);
+                var slowStartLabel = new Array();
+                myChart.data.datasets[1].data = slowStartData;
+                myChart.update();
 
-                    // Run Slow Start ---------------------------------------------------------------------------------------------
 
-                    var slowStartData = slowStart(packetsDroppedArray);
-                    var slowStartLabel = new Array();
+                // Add labels ------------------------------------------------------
 
-                    for (var i = 1; i <= slowStartData.length; i++) {
-                        slowStartLabel.push(i);
-                    }
-                    myChart.data.datasets[1].data = slowStartData;
-                    myChart.data.labels = slowStartLabel;
-                    myChart.update();
+                if (aimdData.length > slowStartData.length)
+                    labelLength = aimdData.length;
+                else
+                    labelLength = slowStartData.length;
+
+                for (var i = 1; i <= labelLength; i++) {
+                    slowStartLabel.push(i);
+                }
+
+                myChart.data.labels = slowStartLabel;
+                myChart.update();
 
 
                 }
